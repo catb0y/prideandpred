@@ -14,9 +14,9 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
 
-# Open text file and randomize lines
+## Open text file and randomize lines
 with open('prideandpred.txt', 'r') as book:
-    unwanted_word = "Mr."
+    unwanted_word = "Mr"
     book_lines = book.read().split('.')
 random.shuffle(book_lines)
 
@@ -24,16 +24,16 @@ random.shuffle(book_lines)
 def tweeter():
     for line in book_lines:
         print line,
-        if line != '\n' or unwanted_word not in line:
-            try:
+        try:
+            if line != '\n' or unwanted_word not in line:
                 api.update_status(line + ". #PrideandPrejudice")
-                time.sleep(900)  # Tweet every 15 min
-            except KeyboardInterrupt:
-                quit()
-            except:
-                tweeter()
+                time.sleep(10)  # Tweet every 15 min
+        except KeyboardInterrupt:
+            quit()
+        except:
+            print "Unexpected error:", sys.exc_info()[1]
 
 tweeter()
 
 for follower in tweepy.Cursor(api.followers).items():
-    follower.follow()
+    follower.follow(
